@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AuthService} from "./services/auth.service";
+import {AuthService} from "../../../services/auth.service";
 
 @Component({
   selector: 'app-authentication',
@@ -10,6 +10,7 @@ export class AuthenticationComponent implements OnInit, OnDestroy {
 
   email: string;
   password: string;
+
   constructor(public authService: AuthService) { }
 
 

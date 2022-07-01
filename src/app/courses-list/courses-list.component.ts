@@ -1,9 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Course} from "./course/course.model";
-import {FilterPipe} from "./pipes/filter.pipe";
-import {CourseListService} from "./services/course-list.service";
-import {AuthService} from "../header/authentication/services/auth.service";
+
 import {Router} from "@angular/router";
+import {CourseListService} from "../services/course-list.service";
+import {Course} from "../models/course.model";
+import {FilterPipe} from "../pipes/filter.pipe";
 
 @Component({
   selector: 'app-courses-list',
