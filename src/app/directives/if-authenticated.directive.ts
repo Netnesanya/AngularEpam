@@ -6,10 +6,12 @@ import {Directive, Input, TemplateRef, ViewContainerRef} from '@angular/core';
 export class IfAuthenticatedDirective {
 
   @Input('appIfAuthenticated') set isAuthenticated(status: boolean) {
-    if (!status) {
+    if (status) {
       this.viewContainer.createEmbeddedView(this.templateRef)
-    } else {
+
+    } else if (!status) {
       this.viewContainer.clear()
+
     }
   }
 

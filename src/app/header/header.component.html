@@ -7,10 +7,16 @@
       <div class="logo__title">Video Course</div>
     </a>
 
-    <div *ngIf="!loginPage; else noContent" class="auth">
-      <a *ngIf="!isAuthenticated; else email" class="login-btn" routerLink="/login" routerLinkActive="active">
+    <div *appIfAuthenticated="!loginPage" class="auth">
+      <a *appIfAuthenticated="!isAuthenticated" class="login-btn" href='#'
+         routerLink="/login" routerLinkActive="active" >
         <div>
-          <img alt="log in" src="https://www.svgrepo.com/show/3130/user.svg">User login
+          <img alt="log in" src="https://www.svgrepo.com/show/3130/user.svg" >User login
+        </div>
+      </a>
+      <a *appIfAuthenticated="isAuthenticated" class="login-btn" href='#' >
+        <div>
+          <p>{{userEmail}}</p>
         </div>
       </a>
 
@@ -23,8 +29,5 @@
 
   </div>
 </div>
-<ng-template #noContent></ng-template>
-<ng-template #email>
-  <div class="user-email">{{userEmail}}</div>
-</ng-template>
+
 

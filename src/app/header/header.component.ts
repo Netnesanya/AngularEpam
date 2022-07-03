@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AuthService} from "../services/auth.service";
 
 @Component({
@@ -6,18 +6,21 @@ import {AuthService} from "../services/auth.service";
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
 
-  loginPage: boolean;
+  loginPage: boolean = false;
   userEmail: string;
-  isAuthenticated: boolean;
+  isAuthenticated: boolean = false;
 
 
+
+
+  onLogoutClick() {
+    this.authService.logout()
+  }
 
   constructor(public authService: AuthService) {
   }
-
-
 
   ngOnInit(): void {
     this.authService.getPageStatus()
@@ -31,7 +34,8 @@ export class HeaderComponent implements OnInit {
     console.log('header', this.isAuthenticated)
   }
 
-  onLogoutClick() {
-    this.authService.logout()
+  ngOnDestroy() {
+    localStorage.removeItem('email')
+    localStorage.removeItem('password')
   }
 }
