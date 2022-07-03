@@ -21,21 +21,21 @@ export class AuthenticationComponent implements OnInit, OnDestroy {
     this.authService.updatePageStatus(true)
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.authService.updatePageStatus(false)
   }
 
-  onLoginClick() {
+  onLoginClick(): void {
     this.authService.login(this.email, this.password)
     this.email = this.password = null
   }
 
-  onAuthCheck() {
+  onAuthCheck(): void {
     this.authService.isAuthenticatedCheck()
 
   }
 
-  onLogEmail() {
+  onLogEmail(): void {
     this.authService.logEmail()
   }
 

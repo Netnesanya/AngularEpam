@@ -1,4 +1,4 @@
-<li class="course-card" [appBorder]="course?.creationDate " [ngClass]="{TopRated: course?.TopRated}">
+<div class="course-card" [appBorder]="course?.creationDate " [ngClass]="{TopRated: course?.TopRated}">
   <div class="course-info">
     <h2 class="course-title">
       {{course?.title | uppercase}}
@@ -21,4 +21,4 @@
         <img alt="delete" src="https://www.svgrepo.com/show/56967/edit.svg">delete</button>
     </div>
   </div>
-</li>
+</div>

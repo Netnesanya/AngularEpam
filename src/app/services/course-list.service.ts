@@ -50,7 +50,7 @@ export class CourseListService {
     }
   ]
 
-  getList() {
+  getList(): Course[]{
     return this.courseList
   }
 
@@ -58,8 +58,8 @@ export class CourseListService {
 
   }
 
-  getCourseById(id: number) {
-    return this.getList().filter(el => {
+  getCourseById(id: number): Course {
+    return this.getList().find(el => {
       return el.id === id
     })
 
@@ -67,9 +67,10 @@ export class CourseListService {
 
   updateCourse() {
 
+
   }
 
-  removeCourse(id: number) {
+  removeCourse(id: number): void {
     const confirmDelete = confirm('Do you really want to delete this course? Yes/No')
     if (confirmDelete) {
       this.courseList = this.courseList.filter(el => {

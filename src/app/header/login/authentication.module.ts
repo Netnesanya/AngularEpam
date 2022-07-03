@@ -4,6 +4,7 @@ import {AuthenticationComponent} from "./authentication/authentication.component
 import {BrowserModule} from "@angular/platform-browser";
 import {FormsModule} from "@angular/forms";
 import {RouterModule, Routes} from "@angular/router";
+import {FilterPipe} from "../../pipes/filter.pipe";
 
 
 const routes: Routes = [
@@ -20,7 +21,8 @@ const routes: Routes = [
     RouterModule.forRoot(routes),
     CommonModule
   ],
-  exports: [AuthenticationComponent]
+  exports: [AuthenticationComponent],
+  providers: [FilterPipe]
 })
 export class AuthenticationModule { }
 

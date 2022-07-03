@@ -23,7 +23,7 @@ export class CourseComponent implements OnInit {
 
   onEditClick(id: number) {}
 
-  handleDelete(id:number) {
+  handleDelete(id:number): void {
     this.onDeleteClick.emit(id)
   }
 

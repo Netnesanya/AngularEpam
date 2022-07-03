@@ -15,7 +15,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
 
 
-  onLogoutClick() {
+  onLogoutClick(): void {
     this.authService.logout()
   }
 
@@ -34,7 +34,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     console.log('header', this.isAuthenticated)
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     localStorage.removeItem('email')
     localStorage.removeItem('password')
   }
