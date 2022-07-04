@@ -22,7 +22,7 @@ const routes: Routes = [
     CommonModule
   ],
   exports: [AuthenticationComponent],
-  providers: [FilterPipe]
+  providers: []
 })
 export class AuthenticationModule { }
 

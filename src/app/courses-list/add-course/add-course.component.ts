@@ -17,7 +17,7 @@ export class AddCourseComponent implements OnInit, OnChanges {
   public courseAuthors: string;
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log(changes)
+
   }
 
   ngOnInit(): void {
@@ -39,7 +39,6 @@ export class AddCourseComponent implements OnInit, OnChanges {
 
   }
   onClick() {
-    console.log(this.courseDuration)
-    console.log(this.courseDate)
+
   }
 }

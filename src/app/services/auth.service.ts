@@ -11,8 +11,8 @@ export class AuthService {
   }
 
   private loginPage: BehaviorSubject<boolean> = new BehaviorSubject(false)
-  private userEmail: BehaviorSubject<string> = new BehaviorSubject(null)
-  private isAuthenticated: BehaviorSubject<boolean> = new BehaviorSubject(false)
+  private userEmail: BehaviorSubject<string> = new BehaviorSubject(localStorage.getItem('email'))
+  private isAuthenticated: BehaviorSubject<boolean> = new BehaviorSubject(!!localStorage.getItem('email'))
 
   login(email: string, password: string): void {
     if (!email || !password) return

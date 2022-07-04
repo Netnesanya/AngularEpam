@@ -10,9 +10,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   loginPage: boolean = false;
   userEmail: string;
-  isAuthenticated: boolean = false;
-
-
 
 
   onLogoutClick(): void {
@@ -28,10 +25,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     this.authService.logEmail()
       .subscribe(email => this.userEmail = email)
-
-    this.authService.isAuthenticatedCheck()
-      .subscribe(isAuth => this.isAuthenticated = isAuth)
-    console.log('header', this.isAuthenticated)
   }
 
   ngOnDestroy(): void {

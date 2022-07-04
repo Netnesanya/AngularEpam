@@ -56,7 +56,7 @@ const routes: Routes = [
 
   ],
   exports: [RouterModule],
-  providers: [],
+  providers: [FilterPipe],
   bootstrap: [AppComponent]
 })
 export class AppModule {
