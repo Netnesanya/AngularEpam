@@ -1,7 +1,7 @@
 .container {
   display: flex;
   align-items: center;
-  height: calc(100vh - 60px);
+  height: calc(100vh - 184px);
   justify-content: center;
 
   .edit-form {
@@ -96,12 +96,6 @@ h2 {
   margin: 0 0 24px 0
 }
 
-//.date-input {
-//  background: url("https://www.svgrepo.com/show/7168/calendar.svg") no-repeat 95% 40%;
-//  background-size: 16px;
-//  cursor: pointer;
-//  border: 1px solid #CED0DB;
-//}
 
 .required {
   font-size: 12px;
@@ -109,6 +103,7 @@ h2 {
 }
 
 .buttons-block {
+  display: flex;
   justify-content: flex-end;
 
   .cancel-button {
@@ -130,6 +125,7 @@ h2 {
       font-weight: 500;
       height: 30px;
       width: 40px;
+      cursor: pointer;
     }
   }
 
@@ -151,6 +147,7 @@ h2 {
       font-weight: 500;
       height: 30px;
       width: 29px;
+      cursor: pointer;
     }
   }
 }

@@ -12,7 +12,7 @@ export class AuthService {
 
   private loginPage: BehaviorSubject<boolean> = new BehaviorSubject(false)
   private userEmail: BehaviorSubject<string> = new BehaviorSubject(localStorage.getItem('email'))
-  private isAuthenticated: BehaviorSubject<boolean> = new BehaviorSubject(!!localStorage.getItem('email'))
+  private isAuthenticated: BehaviorSubject<boolean> = new BehaviorSubject(this.isAuth())
 
   login(email: string, password: string): void {
     if (!email || !password) return
@@ -39,7 +39,6 @@ export class AuthService {
       this.userEmail.next(null)
       this.isAuthenticated.next(false)
     }
-
   }
 
   getPageStatus(): Observable<boolean> {
@@ -58,5 +57,9 @@ export class AuthService {
   logEmail(): Observable<string> {
     console.log(localStorage.getItem('email'))
     return this.userEmail.asObservable()
+  }
+
+  isAuth() {
+    return !!localStorage.getItem('email')
   }
 }

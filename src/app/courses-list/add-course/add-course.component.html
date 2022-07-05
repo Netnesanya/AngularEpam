@@ -1,4 +1,5 @@
-<div class="container" (click)="onClick()">
+<app-breadcrumbs></app-breadcrumbs>
+<div class="container">
   <form class="edit-form">
     <h2>New Course</h2>
 
@@ -15,19 +16,10 @@
                 [(ngModel)]="courseDescription">{{courseDescription}}</textarea>
     </div>
 
-    <!--  <div class="form-field timings">-->
-    <!--    <p>Duration: </p>-->
-    <!--    <p class="required">* required</p>-->
-    <!--    <input class='duration-input' type="text" placeholder="minutes">-->
-    <!--  </div>-->
-      <app-duration-input (courseDurationChange)="onDurationChange($event)"></app-duration-input>
+    <app-duration-input (courseDurationChange)="onDurationChange($event)"></app-duration-input>
 
-    <!--  <div class="form-field timings" >-->
-    <!--    <p>Date: </p>-->
-    <!--    <p class="required">* required</p>-->
-    <!--    <input class='date-input' type="text" placeholder="MM/DD/YYYY">-->
-    <!--  </div>-->
-    <app-date-input (courseDateChange)="onDateChange($event)"></app-date-input>
+    <app-date-input></app-date-input>
+<!--    <app-date-input (courseDateChange)="onDateChange($event)"></app-date-input>-->
 
     <div class="form-field authors">
       <p>Authors: </p>
@@ -36,7 +28,7 @@
     </div>
 
     <div class="buttons-block">
-      <button class="cancel-button" type="button" (click)="onCancelClick()" ><<label>Cancel</label></button>
+      <button class="cancel-button" type="button" (click)="onCancelClick()" ><label>Cancel</label></button>
       <button class="save-button" type="button" (click)="onSaveClick()"><label>Save</label></button>
     </div>
   </form>

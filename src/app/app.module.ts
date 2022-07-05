@@ -19,13 +19,15 @@ import {DurationPipe} from "./pipes/duration.pipe";
 import {OrderByPipe} from "./pipes/order-by.pipe";
 import {FilterPipe} from "./pipes/filter.pipe";
 import {AuthenticationModule} from "./header/login/authentication.module";
+import {Error404Component} from "./error404/error404.component";
+import {AuthGuard} from "./guards/auth.guard";
 
 const routes: Routes = [
   {path: 'courses', component: CoursesListComponent},
-  // {path: 'login', component: AuthenticationComponent},
-  {path: 'edit', component: AddCourseComponent},
-  {path: '', redirectTo: 'courses', pathMatch: 'full'}
-  // {path: '**', redirectTo: 'courses'}
+  {path: 'courses/new', component: AddCourseComponent, canActivate: [AuthGuard]},
+  {path: 'courses/:id', component: AddCourseComponent, canActivate: [AuthGuard]},
+  {path: '', redirectTo: 'courses', pathMatch: 'full'},
+  {path: '**', component: Error404Component}
 ]
 
 @NgModule({
@@ -44,9 +46,7 @@ const routes: Routes = [
     FilterPipe,
     DateInputComponent,
     DurationInputComponent,
-    IfAuthenticatedDirective,
-    // AuthenticationComponent
-
+    IfAuthenticatedDirective
   ],
   imports: [
     BrowserModule,

@@ -50,7 +50,7 @@ export class CoursesListComponent implements OnInit {
   }
 
   onAddCourseClick(): void {
-    this.router.navigate(['edit'])
+    this.router.navigate(['/courses/new'])
   }
 
 }
