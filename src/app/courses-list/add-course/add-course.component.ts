@@ -33,8 +33,6 @@ export class AddCourseComponent implements OnInit {
       this.courseEdit()
     }
 
-
-
   }
 
   courseCreation(): void {
@@ -82,9 +80,11 @@ export class AddCourseComponent implements OnInit {
       this.courseCreation()
       this.courseList.courseList.push(this.currentCourse)
       this.router.navigate(['/courses'])
+
     } else if (this.currentId) {
-      this.courseEdit()
       this.courseCreation()
+      this.courseList.courseList.filter(el => el.id !== this.currentId)
+      this.courseList.courseList.push({...this.currentCourse})
       this.router.navigate(['/courses'])
     }
 
