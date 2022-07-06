@@ -1,6 +1,5 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Course} from "./course.model";
-import {CourseListService} from "../services/course-list.service";
+import {Course} from "../../models/course.model";
 
 
 @Component({
@@ -24,7 +23,7 @@ export class CourseComponent implements OnInit {
 
   onEditClick(id: number) {}
 
-  handleDelete(id:number) {
+  handleDelete(id:number): void {
     this.onDeleteClick.emit(id)
   }
 

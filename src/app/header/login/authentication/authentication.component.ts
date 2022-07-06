@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AuthService} from "./services/auth.service";
+import {AuthService} from "../../../services/auth.service";
 
 @Component({
   selector: 'app-authentication',
@@ -10,6 +10,7 @@ export class AuthenticationComponent implements OnInit, OnDestroy {
 
   email: string;
   password: string;
+
   constructor(public authService: AuthService) { }
 
 
@@ -20,21 +21,21 @@ export class AuthenticationComponent implements OnInit, OnDestroy {
     this.authService.updatePageStatus(true)
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.authService.updatePageStatus(false)
   }
 
-  onLoginClick() {
+  onLoginClick(): void {
     this.authService.login(this.email, this.password)
     this.email = this.password = null
   }
 
-  onAuthCheck() {
+  onAuthCheck(): void {
     this.authService.isAuthenticatedCheck()
 
   }
 
-  onLogEmail() {
+  onLogEmail(): void {
     this.authService.logEmail()
   }
 

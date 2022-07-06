@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, Observable} from "rxjs";
 import {Router} from "@angular/router";
 
 @Injectable({
@@ -11,10 +11,10 @@ export class AuthService {
   }
 
   private loginPage: BehaviorSubject<boolean> = new BehaviorSubject(false)
-  private userEmail: BehaviorSubject<string> = new BehaviorSubject(null)
-  private isAuthenticated: BehaviorSubject<boolean> = new BehaviorSubject(false)
+  private userEmail: BehaviorSubject<string> = new BehaviorSubject(localStorage.getItem('email'))
+  private isAuthenticated: BehaviorSubject<boolean> = new BehaviorSubject(!!localStorage.getItem('email'))
 
-  login(email: string, password: string) {
+  login(email: string, password: string): void {
     if (!email || !password) return
 
     localStorage.setItem('email', email)
@@ -29,33 +29,33 @@ export class AuthService {
     }
   }
 
-  logout() {
-    if (this.isAuthenticated.getValue() && this.userEmail.getValue())
+  logout(): void {
+    if (this.isAuthenticated.getValue() && this.userEmail.getValue()) {
+      console.log('Logout', localStorage.getItem('email'))
 
-    console.log('Logout', localStorage.getItem('email'))
+      localStorage.removeItem('email')
+      localStorage.removeItem('password')
 
-    localStorage.removeItem('email')
-    localStorage.removeItem('password')
-
-    this.userEmail.next(null)
-    this.isAuthenticated.next(false)
+      this.userEmail.next(null)
+      this.isAuthenticated.next(false)
+    }
 
   }
 
-  getPageStatus() {
+  getPageStatus(): Observable<boolean> {
     return this.loginPage.asObservable()
   }
 
-  updatePageStatus(value: boolean) {
+  updatePageStatus(value: boolean): void {
     this.loginPage.next(value)
   }
 
-  isAuthenticatedCheck() {
+  isAuthenticatedCheck(): Observable<boolean> {
     console.log('authService', !!localStorage.getItem('email'));
     return this.isAuthenticated.asObservable()
   }
 
-  logEmail() {
+  logEmail(): Observable<string> {
     console.log(localStorage.getItem('email'))
     return this.userEmail.asObservable()
   }

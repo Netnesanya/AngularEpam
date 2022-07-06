@@ -1,9 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Course} from "./course/course.model";
-import {FilterPipe} from "./pipes/filter.pipe";
-import {CourseListService} from "./services/course-list.service";
-import {AuthService} from "../header/authentication/services/auth.service";
+
 import {Router} from "@angular/router";
+import {CourseListService} from "../services/course-list.service";
+import {Course} from "../models/course.model";
+import {FilterPipe} from "../pipes/filter.pipe";
 
 @Component({
   selector: 'app-courses-list',
@@ -14,42 +14,42 @@ export class CoursesListComponent implements OnInit {
 
 
   public searchQuery: string = ''
+  courseList: Course[];
 
 
-  constructor(public courseListService: CourseListService, public router: Router) {
+  handleDelete = (id: number): void =>  {
+    this.courseListService.removeCourse(id)
+    this.courseList = this.courseListService.getList()
   }
 
-  courseList: Course[];
+  constructor(public courseListService: CourseListService,
+              public router: Router,
+              public filterPipe: FilterPipe) {
+  }
 
   ngOnInit(): void {
     this.courseList = this.courseListService.getList()
   }
 
   handleSearch(): void {
-    let filter = new FilterPipe()
-    this.courseList = filter.transform(this.courseList, this.searchQuery)
+    this.courseList = this.filterPipe.transform(this.courseList, this.searchQuery)
     this.searchQuery = ''
-  }
-
-  handleDelete = (id: number) => {
-    this.courseListService.removeCourse(id)
-    this.courseList = this.courseListService.getList()
   }
 
   handleLoadMore(): void {
     console.log("there's nothing to load")
   }
 
-  trackById(index: number, course: Course) {
+  trackById(index: number, course: Course): number {
     return course.id
   }
 
 
-  handleRedefine() {
+  handleRedefine(): void{
     this.courseList = this.courseListService.handleRedefine()
   }
 
-  onAddCourseClick() {
+  onAddCourseClick(): void {
     this.router.navigate(['edit'])
   }
 
