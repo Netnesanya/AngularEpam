@@ -14,9 +14,8 @@
       {{course?.description}}
     </div>
     <div class="course-controls">
-      <button class="edit"><img alt="edit"
-                                src="https://www.svgrepo.com/show/22981/trash-can.svg"
-                                (click)="onEditClick(course.id)">edit</button>
+      <button class="edit" (click)="onEditClick(course.id)">
+        <img alt="edit" src="https://www.svgrepo.com/show/22981/trash-can.svg">edit</button>
       <button (click)="handleDelete(course.id)">
         <img alt="delete" src="https://www.svgrepo.com/show/56967/edit.svg">delete</button>
     </div>

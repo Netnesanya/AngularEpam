@@ -4,11 +4,10 @@ import {AuthenticationComponent} from "./authentication/authentication.component
 import {BrowserModule} from "@angular/platform-browser";
 import {FormsModule} from "@angular/forms";
 import {RouterModule, Routes} from "@angular/router";
-import {FilterPipe} from "../../pipes/filter.pipe";
 
 
 const routes: Routes = [
-  {path: 'login', component: AuthenticationComponent},
+  {path: 'login', component: AuthenticationComponent}
 ]
 
 @NgModule({

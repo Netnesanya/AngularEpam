@@ -1,5 +1,6 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Course} from "../../models/course.model";
+import {ActivatedRoute, Router} from "@angular/router";
 
 
 @Component({
@@ -15,13 +16,13 @@ export class CourseComponent implements OnInit {
 
   @Output() onDeleteClick = new EventEmitter<number>()
 
-  constructor() {}
+  constructor(public router: Router) {}
 
-  ngOnInit(): void {
+  ngOnInit(): void {  }
 
+  onEditClick(id: number) {
+    this.router.navigate([`courses/${id}`])
   }
-
-  onEditClick(id: number) {}
 
   handleDelete(id:number): void {
     this.onDeleteClick.emit(id)
