@@ -27,9 +27,9 @@ export class CourseFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.currentId = parseInt(this.route.snapshot.paramMap.get('id'))
+    this.currentId = Number(this.route.snapshot.paramMap.get('id'))
 
-    if (!this.CourseListService.getCourseById(this.currentId) && this.currentId) {
+    if (isNaN(this.currentId) || !this.CourseListService.getCourseById(this.currentId) && this.currentId) {
       this.router.navigate(['404'])
     }
 
