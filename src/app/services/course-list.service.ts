@@ -50,12 +50,12 @@ export class CourseListService {
     }
   ]
 
-  getList(): Course[]{
+  getList(): Course[] {
     return this.courseList
   }
 
-  createCourse() {
-
+  createCourse(course: Course): void {
+    this.courseList.push(course)
   }
 
   getCourseById(id: number): Course {
@@ -65,10 +65,11 @@ export class CourseListService {
 
   }
 
-  updateCourse() {
-
-
+  updateCourse(id: number, course: Course) {
+    this.courseList = this.courseList.filter(el => el.id !== id)
+    this.createCourse(course)
   }
+
 
   removeCourse(id: number): void {
     const confirmDelete = confirm('Do you really want to delete this course? Yes/No')

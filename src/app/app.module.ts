@@ -7,7 +7,7 @@ import {FooterComponent} from './footer/footer.component';
 import {BreadcrumbsComponent} from './breadcrumbs/breadcrumbs.component';
 import {CoursesListComponent} from './courses-list/courses-list.component';
 import {CourseComponent} from './courses-list/course/course.component';
-import {AddCourseComponent} from './courses-list/add-course/add-course.component';
+import {CourseFormComponent} from './courses-list/add-course/course-form.component';
 import {ControlsComponent} from './courses-list/course/controls/controls.component';
 import {FormsModule} from "@angular/forms";
 import {RouterModule, Routes} from "@angular/router";
@@ -23,12 +23,27 @@ import {Error404Component} from "./error404/error404.component";
 import {AuthGuard} from "./guards/auth.guard";
 
 const routes: Routes = [
-  {path: 'courses', component: CoursesListComponent},
-  {path: 'courses/new', component: AddCourseComponent, canActivate: [AuthGuard]},
-  {path: 'courses/:id', component: AddCourseComponent, canActivate: [AuthGuard]},
+  {
+    path: 'courses',
+    canActivate: [AuthGuard],
+    children: [
+      {
+        path: '',
+        component: CoursesListComponent,
+      },
+      {
+        path: 'new',
+        component: CourseFormComponent,
+      },
+      {
+        path: ':id',
+        component: CourseFormComponent,
+      },
+    ],
+  },
   {path: '', redirectTo: 'courses', pathMatch: 'full'},
-  {path: '**', component: Error404Component}
-]
+  {path: '**', component: Error404Component},
+];
 
 @NgModule({
   declarations: [
@@ -38,7 +53,7 @@ const routes: Routes = [
     BreadcrumbsComponent,
     CoursesListComponent,
     CourseComponent,
-    AddCourseComponent,
+    CourseFormComponent,
     ControlsComponent,
     BorderDirective,
     DurationPipe,
