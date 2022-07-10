@@ -1,6 +1,7 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Course} from "../../models/course.model";
+
 import {ActivatedRoute, Router} from "@angular/router";
+import {Course} from "../../shared/models/course.model";
 
 
 @Component({

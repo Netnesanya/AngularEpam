@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Course} from "../models/course.model";
+import {HttpClient} from "@angular/common/http";
 
 
 @Injectable({
@@ -8,7 +9,7 @@ import {Course} from "../models/course.model";
 export class CourseListService {
 
 
-  constructor() {
+  constructor(private httpClient: HttpClient) {
   }
 
   public courseList: Course[] = [
