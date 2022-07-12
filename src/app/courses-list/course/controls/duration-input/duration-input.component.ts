@@ -12,7 +12,6 @@ export class DurationInputComponent implements OnInit {
 
   constructor() { }
 
-
   ngOnInit(): void {
   }
 

@@ -1,27 +1,28 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable} from "rxjs";
 import {Router} from "@angular/router";
+import {HttpClient} from "@angular/common/http";
+import {environment} from "../../../environments/environment";
+import {Authentication, AuthResponse, User} from "../models/authentication.model";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(public router: Router) {
+  constructor(public router: Router,
+              private httpClient: HttpClient) {
   }
 
   private loginPage: BehaviorSubject<boolean> = new BehaviorSubject(false)
-  private userEmail: BehaviorSubject<string> = new BehaviorSubject(localStorage.getItem('email'))
+  private userToken: BehaviorSubject<string> = new BehaviorSubject(localStorage.getItem('token'))
   private isAuthenticated: BehaviorSubject<boolean> = new BehaviorSubject(this.isAuth())
 
-  login(email: string, password: string): void {
-    if (!email || !password) return
+  login(login: string, password: string): void {
+    if (!login || !password) return
 
-    localStorage.setItem('email', email)
-    localStorage.setItem('password', password)
-    console.log('logged in successfully')
+    this.handleLogin({login, password})
 
-    this.userEmail.next(email)
     this.isAuthenticated.next(true)
 
     if (this.isAuthenticated.getValue()) {
@@ -30,15 +31,26 @@ export class AuthService {
   }
 
   logout(): void {
-    if (this.isAuthenticated.getValue() && this.userEmail.getValue()) {
-      console.log('Logout', localStorage.getItem('email'))
-
-      localStorage.removeItem('email')
-      localStorage.removeItem('password')
-
-      this.userEmail.next(null)
+    if (this.isAuthenticated.getValue()) {
+      localStorage.setItem('token', '')
       this.isAuthenticated.next(false)
     }
+  }
+
+  handleLogin(userData: Authentication): void {
+    this.httpClient.post<AuthResponse>(`${environment.URL}auth/login`, userData)
+      .subscribe(response => this.setToken(response))
+  }
+
+  setToken(response: AuthResponse) {
+    if (response) {
+      this.isAuthenticated.next(true)
+      this.router.navigate(['courses'])
+    }
+  }
+
+  getToken() {
+    return localStorage.getItem('token')
   }
 
   getPageStatus(): Observable<boolean> {
@@ -50,16 +62,15 @@ export class AuthService {
   }
 
   isAuthenticatedCheck(): Observable<boolean> {
-    console.log('authService', !!localStorage.getItem('email'));
     return this.isAuthenticated.asObservable()
   }
 
-  logEmail(): Observable<string> {
-    console.log(localStorage.getItem('email'))
-    return this.userEmail.asObservable()
+  getUser(): Observable<User> {
+    const token = this.getToken()
+    return this.httpClient.post<User>(`${environment.URL}auth/userinfo`, {token})
   }
 
   isAuth() {
-    return !!localStorage.getItem('email')
+    return !!localStorage.getItem('token')
   }
 }

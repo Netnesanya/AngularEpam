@@ -10,7 +10,7 @@ export class OrderByPipe implements PipeTransform {
     const courses = [...value]
 
     return courses.sort((prev, next) =>  {
-      return  +next.creationDate - +prev.creationDate
+      return  +next.date - +prev.date
     })
   }
 

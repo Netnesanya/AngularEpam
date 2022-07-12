@@ -1,12 +1,12 @@
-<div class="course-card" [appBorder]="course?.creationDate " [ngClass]="{TopRated: course?.TopRated}">
+<div class="course-card" [appBorder]="course?.date " [ngClass]="{TopRated: course?.isTopRated}">
   <div class="course-info">
     <h2 class="course-title">
-      {{course?.title | uppercase}}
-      <img src="./assets/icons/star.svg" alt="Top Rated" *ngIf="course?.TopRated">
+      {{course?.name | uppercase}}
+      <img src="./assets/icons/star.svg" alt="Top Rated" *ngIf="course?.isTopRated">
     </h2>
     <div class="course-time">
-      <p><img src="https://www.svgrepo.com/show/8869/clock.svg" alt="duration">{{course?.duration | duration}}</p>
-      <p><img src="https://www.svgrepo.com/show/7168/calendar.svg" alt="date">{{course?.creationDate | date:'mediumDate'}}</p>
+      <p><img src="https://www.svgrepo.com/show/8869/clock.svg" alt="duration">{{course?.length | duration}}</p>
+      <p><img src="https://www.svgrepo.com/show/7168/calendar.svg" alt="date">{{course?.date | date:'mediumDate'}}</p>
     </div>
   </div>
   <div class="course-info">

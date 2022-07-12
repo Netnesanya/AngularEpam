@@ -1,5 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AuthService} from "../services/auth.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-header',
@@ -12,19 +13,25 @@ export class HeaderComponent implements OnInit, OnDestroy {
   userEmail: string;
 
 
-  onLogoutClick(): void {
-    this.authService.logout()
+  constructor(public authService: AuthService,
+              private router: Router) {
   }
 
-  constructor(public authService: AuthService) {
+  onLogoutClick(): void {
+    const confirmation = confirm('Are you sure you want to leave?')
+    if (!!confirmation) {
+      this.authService.logout()
+      this.router.navigate(['/login'])
+    }
+
   }
 
   ngOnInit(): void {
     this.authService.getPageStatus()
       .subscribe(pageStatus => this.loginPage = pageStatus)
 
-    this.authService.logEmail()
-      .subscribe(email => this.userEmail = email)
+    // this.authService.logEmail()
+    //   .subscribe(email => this.userEmail = email)
   }
 
   ngOnDestroy(): void {

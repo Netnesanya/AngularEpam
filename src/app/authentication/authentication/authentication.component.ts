@@ -1,5 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AuthService} from "../../shared/services/auth.service";
+import {HttpClient} from "@angular/common/http";
 
 
 @Component({
@@ -37,7 +38,8 @@ export class AuthenticationComponent implements OnInit, OnDestroy {
   }
 
   onLogEmail(): void {
-    this.authService.logEmail()
+    this.authService.getUser()
+      .subscribe(user => console.log(user));
   }
 
 }

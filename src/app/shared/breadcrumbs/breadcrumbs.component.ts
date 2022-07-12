@@ -10,24 +10,23 @@ import {Course} from "../models/course.model";
 })
 export class BreadcrumbsComponent implements OnInit {
 
-  public currentCourseName: string;
-  private currentCourse: Course;
+  public currentCourse: Course;
   private currentId: number;
 
   constructor(private route: ActivatedRoute,
-              private courseList: CourseListService) { }
+              private courseListService: CourseListService) { }
 
   ngOnInit(): void {
     this.currentId = parseInt(this.route.snapshot.paramMap.get('id'));
-    this.findCourseTitle(this.currentId)
-    console.log(this.currentId);
+
+    this.findCourseTitle(this.currentId);
 
   }
 
   findCourseTitle(id: number) {
     if (!this.currentId) return
-    this.currentCourse = this.courseList.courseList.find(el => el.id === id)
-    this.currentCourseName = this.currentCourse.title
+    this.courseListService.getCourseById(id)
+      .subscribe(course => this.currentCourse = course)
   }
 
 }

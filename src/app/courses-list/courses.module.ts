@@ -3,9 +3,7 @@ import { CommonModule } from '@angular/common';
 import {RouterModule, Routes} from "@angular/router";
 import {CoursesListComponent} from "./courses-list.component";
 import {CourseComponent} from "./course/course.component";
-
 import {SharedModule} from "../shared/shared.module";
-import {BrowserModule} from "@angular/platform-browser";
 import {FormsModule} from "@angular/forms";
 import {AuthGuard} from "../shared/guards/auth.guard";
 import {CourseFormComponent} from "./course-form/course-form.component";
@@ -50,7 +48,6 @@ const routes: Routes = [
     RouterModule.forChild(routes),
   ],
   providers: [
-    FilterPipe
   ]
 
 })

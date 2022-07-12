@@ -6,30 +6,31 @@
     <div class="form-field title">
       <p>Title: </p>
       <p class="required">* required</p>
-      <input name="course-title" class='title-input' type="text" placeholder="Text input" [(ngModel)]="courseTitle">
+      <input [(ngModel)]="courseName" class='title-input' name="course-title" placeholder="Text input" type="text">
     </div>
 
     <div class="form-field description">
       <p>Description: </p>
       <p class="required">* required</p>
-      <textarea name="course-description" class='description-input' placeholder="Add description"
-                [(ngModel)]="courseDescription">{{courseDescription}}</textarea>
+      <textarea [(ngModel)]="courseDescription" class='description-input' name="course-description"
+                placeholder="Add description">{{courseDescription}}</textarea>
     </div>
 
     <app-duration-input (courseDurationChange)="onDurationChange($event)"></app-duration-input>
 
-    <app-date-input></app-date-input>
-<!--    <app-date-input (courseDateChange)="onDateChange($event)"></app-date-input>-->
+    <!--    <app-date-input></app-date-input>-->
+    <app-date-input (courseDateChange)="onDateChange($event)"></app-date-input>
 
     <div class="form-field authors">
       <p>Authors: </p>
       <p class="required">* required</p>
-      <input name="course-authors" class='authors-input' type="text" placeholder="Start typing" [(ngModel)]="courseAuthors">
+      <input [(ngModel)]="courseAuthors" class='authors-input' name="course-authors" placeholder="Start typing"
+             type="text">
     </div>
 
     <div class="buttons-block">
-      <button class="cancel-button" type="button" (click)="onCancelClick()" ><label>Cancel</label></button>
-      <button class="save-button" type="button" (click)="onSaveClick()"><label>Save</label></button>
+      <button (click)="onCancelClick()" class="cancel-button" type="button"><label>Cancel</label></button>
+      <button (click)="onSaveClick()" class="save-button" type="button"><label>Save</label></button>
     </div>
   </form>
 </div>

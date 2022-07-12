@@ -5,7 +5,7 @@ import {Directive, ElementRef, Input, OnChanges} from '@angular/core';
 })
 export class BorderDirective implements OnChanges {
 
-  @Input('appBorder') public courseDate!: Date;
+  @Input('appBorder') public courseDate!: string;
 
   constructor(private element: ElementRef) {
   }

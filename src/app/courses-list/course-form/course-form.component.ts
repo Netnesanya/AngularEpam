@@ -1,7 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
-import {Course} from "../../shared/models/course.model";
+import {Author, Course} from "../../shared/models/course.model";
 import {CourseListService} from "../../shared/services/course-list.service";
+import {Subscription} from "rxjs";
 
 
 @Component({
@@ -9,67 +10,88 @@ import {CourseListService} from "../../shared/services/course-list.service";
   templateUrl: './course-form.component.html',
   styleUrls: ['./course-form.component.scss']
 })
-export class CourseFormComponent implements OnInit {
+export class CourseFormComponent implements OnInit, OnDestroy {
 
-  public currentCourse: Course;
-  public courseDuration: number;
-  public courseDate: Date
+  private courseFormSub$: Subscription;
+  private currentCourse: Course;
+
+
+  public courseLength: number;
+  public courseDate: string;
   public courseDescription: string;
-  public courseTitle: string
-  public courseAuthors: string;
+  public courseName: string
+  public courseAuthors: Author;
   public courseTopRated: boolean;
   public currentId: number;
 
-
   constructor(public router: Router,
-              public CourseListService: CourseListService,
+              public courseListService: CourseListService,
               public route: ActivatedRoute) {
   }
 
   ngOnInit(): void {
     this.currentId = Number(this.route.snapshot.paramMap.get('id'))
 
-    if (isNaN(this.currentId) || !this.CourseListService.getCourseById(this.currentId) && this.currentId) {
+    if (isNaN(this.currentId) || !this.courseListService.getCourseById(this.currentId) && this.currentId) {
       this.router.navigate(['404'])
-    }
 
-    if (this.currentId) {
-      this.currentCourse = this.CourseListService.getCourseById(this.currentId)
-      this.courseEdit()
-    }
+    } else if (this.currentId) {
 
-  }
+      this.courseFormSub$ = this.courseListService.getCourseById(this.currentId)
+        .subscribe(course => {
 
-  courseCreation(): void {
-    this.currentCourse = {
-      id: 1234123,
-      title: this.courseTitle,
-      duration: this.courseDuration,
-      creationDate: new Date(),
-      // creationDate: this.courseDate,
-      TopRated: this.courseTopRated,
-      description: this.courseDescription,
-      authors: this.courseAuthors
+          this.currentCourse = course;
+          this.courseDate = this.currentCourse.date;
+          this.courseName = this.currentCourse.name;
+          this.courseLength = this.currentCourse.length;
+          this.courseDescription = this.currentCourse.description;
+          this.courseTopRated = this.currentCourse.isTopRated;
+          this.courseAuthors = this.currentCourse.authors
+
+        })
     }
   }
 
-  courseEdit(): void {
-    this.courseDuration = this.currentCourse.duration
-    this.courseDescription = this.currentCourse.description
-    this.courseTitle = this.currentCourse.title
-    this.courseAuthors = this.currentCourse.authors
-    // this.courseDate = this.currentCourse.creationDate
-    this.courseDate = new Date()
-    this.courseTopRated = this.currentCourse.TopRated
+  ngOnDestroy() {
+    this.courseFormSub$.unsubscribe()
   }
-
 
   onDurationChange(value: number): void {
-    this.courseDuration = value
+    this.courseLength = value
   }
 
-  onDateChange(value: Date): void {
+  onDateChange(value: string): void {
     this.courseDate = value
+  }
+
+  createCourse(): Course {
+    return this.currentCourse = {
+      name: this.courseName,
+      length: this.courseLength,
+      date: this.courseDate,
+      id: this.currentId,
+      description: this.courseDescription,
+      authors: {
+        id: 123,
+        name: 'author'
+      },
+      isTopRated: (5 < (Math.random() * 10))
+    }
+  }
+
+  editCourse(): Course {
+    return this.currentCourse = {
+      id: this.currentId,
+      name: this.courseName,
+      description: this.courseDescription,
+      length: this.courseLength,
+      date: this.courseDate,
+      authors: {
+        id: 123,
+        name: 'author'
+      },
+      isTopRated: (5 < (Math.random() * 10))
+    }
   }
 
   onCancelClick(): void {
@@ -77,14 +99,15 @@ export class CourseFormComponent implements OnInit {
   }
 
   onSaveClick(): void {
-    if (!this.currentId) {
-      this.courseCreation()
-      this.CourseListService.createCourse(this.currentCourse)
+    if (this.currentId) {
+      this.courseFormSub$ = this.courseListService.updateCourse(this.currentId, this.editCourse())
+        .subscribe(response => console.log(response))
+      this.courseListService.getList()
       this.router.navigate(['/courses'])
-
-    } else if (this.currentId) {
-      this.courseCreation()
-      this.CourseListService.updateCourse(this.currentId, this.currentCourse)
+    } else {
+      this.courseFormSub$ = this.courseListService.createCourse(this.createCourse())
+        .subscribe(response => console.log(response))
+      this.courseListService.getList()
       this.router.navigate(['/courses'])
     }
   }
