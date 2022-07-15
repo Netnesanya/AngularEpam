@@ -7,8 +7,8 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 })
 export class DateInputComponent implements OnInit {
 
-  @Output() courseDateChange = new EventEmitter<string>()
-  @Input() courseDate: string
+  @Output() public courseDateChange = new EventEmitter<string>()
+  @Input() public courseDate: string
 
   constructor() { }
 

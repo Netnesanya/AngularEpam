@@ -5,19 +5,26 @@
     <button (click)="handleSearch()" class="search-btn" type="submit"><label>Search</label></button>
   </div>
   <div class="btn-container">
-    <button class="add-course-btn" (click)="onAddCourseClick()">
+    <button (click)="onAddCourseClick()" class="add-course-btn">
       <img alt="add course" src="https://svg-clipart.com/svg/sign/kDyFk8m-white-plus-vector.svg">
       <label>Add Course</label>
     </button>
   </div>
   <div *ngIf="courseList?.length; else emptyList">
-    <app-course (onDeleteClick)="handleDelete($event)" *ngFor="let course of courseList | orderBy; trackBy: trackById"
+    <app-course (onDeleteClick)="handleDelete($event)" *ngFor="let course of courseList; trackBy: trackById"
                 [course]="course"></app-course>
-    <div class="course-load"><a (click)="handleLoadMore()" href="#">Load more</a></div>
-    <div class="course-load"><a (click)="handleRedefine()" href="#">Redefine Data</a></div>
+    <button (click)="handlePrev()" class="pagination-button" type="button">Prev</button>
+    <button (click)="handleNext()" class="pagination-button" type="button">Next</button>
+    <div class="course-load">
+      <a (click)="handleLoadMore($event)" href="">Load more</a>
+
+    </div>
   </div>
 </div>
 
 <ng-template #emptyList>
   <h1>No data, feel free to add new course</h1>
+  <div class="course-load">
+    <a (click)="handleLoadMore($event)" href="">Load more</a>
+  </div>
 </ng-template>

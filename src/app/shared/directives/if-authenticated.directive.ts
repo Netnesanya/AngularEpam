@@ -17,7 +17,6 @@ export class IfAuthenticatedDirective implements OnInit {
   ngOnInit() {
     this.authService.isAuthenticatedCheck()
       .subscribe((status) => this.isAuthenticated(status))
-    console.log('directive', this.authStatus)
   }
 
   private isAuthenticated(status: boolean) {

@@ -10,7 +10,7 @@ export class FilterPipe implements PipeTransform {
 
     if (!query.trim()) return courses
 
-    return courses.filter(course => course.title.toLowerCase().trim().includes(query.toLowerCase().trim()))
+    return courses.filter(course => course.name.toLowerCase().trim().includes(query.toLowerCase().trim()))
   }
 
 
