@@ -1,12 +1,13 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 
 import {Router} from "@angular/router";
 import {CourseListService} from "../shared/services/course-list.service";
 
 import {Course} from "../shared/models/course.model";
-import {FilterPipe} from "../shared/pipes/filter.pipe";
-import {Subscription} from "rxjs";
-import {query} from "@angular/animations";
+import {BehaviorSubject, debounceTime, Subscription} from "rxjs";
+import {NgxSpinnerService} from "ngx-spinner";
+
+
 
 @Component({
   selector: 'app-courses-list',
@@ -16,46 +17,53 @@ import {query} from "@angular/animations";
 export class CoursesListComponent implements OnInit, OnDestroy {
 
 
-  public searchQuery: string = '';
+  public searchQuery = new BehaviorSubject<string>('');
   public courseList: Course[];
   public portion: number = 0;
 
-  private courseSub: Subscription;
+  private courseSub$: Subscription;
 
 
+  constructor(public courseListService: CourseListService,
+              public router: Router,
+              private spinner: NgxSpinnerService) {
+  }
 
-  handleDelete = (id: number): void =>  {
+  ngOnInit(): void {
+    this.spinner.show()
+    this.updateList()
+  }
+
+  ngOnDestroy() {
+    this.courseSub$.unsubscribe()
+  }
+
+  handleDelete(id: number): void {
     const confirmDelete = confirm('Do you really want to delete this course? Yes/No')
     if (confirmDelete) {
-      this.courseSub = this.courseListService.removeCourse(id)
+      this.spinner.show()
+      this.courseSub$ = this.courseListService.removeCourse(id)
         .subscribe(response => console.log(response))
       this.updateList()
     }
   }
 
-  constructor(public courseListService: CourseListService,
-              public router: Router) {
-  }
-
-  ngOnInit(): void {
-    this.updateList()
-  }
-
-  ngOnDestroy() {
-    this.courseSub.unsubscribe()
-  }
-
-  handleSearch(): void {
-    this.courseSub = this.courseListService.getList(this.portion, this.searchQuery, 30)
-      .subscribe(list => this.courseList = list)
-    this.searchQuery = ''
+  handleSearch(event: any): void {
+    this.searchQuery.next(event.target.value)
+    if (this.searchQuery.getValue().length >= 3) {
+      this.searchQuery
+        .pipe(debounceTime(300))
+        .subscribe(query => this.updateList(this.portion, query, 30))
+    }
   }
 
   handleLoadMore(event: Event): void {
     event.preventDefault()
-    this.courseSub = this.courseListService.getList(++this.portion)
+    this.spinner.show()
+    this.courseSub$ = this.courseListService.getList(++this.portion)
       .subscribe(list => {
         this.courseList = [...this.courseList, ...list]
+        this.spinner.hide()
       })
   }
 
@@ -63,11 +71,14 @@ export class CoursesListComponent implements OnInit, OnDestroy {
     return course.id
   }
 
-  updateList(): void {
-    this.courseSub = this.courseListService.getList()
-      .subscribe(courseList => this.courseList = courseList)
+  updateList(portion: number = 0, query: string = '', coursesCount: number = 3): void {
+    this.spinner.show()
+    this.courseSub$ = this.courseListService.getList(portion, query, coursesCount)
+      .subscribe(courseList => {
+        this.courseList = courseList
+        this.spinner.hide()
+      })
   }
-
 
   onAddCourseClick(): void {
     this.router.navigate(['/courses/new'])
@@ -75,16 +86,10 @@ export class CoursesListComponent implements OnInit, OnDestroy {
 
   handlePrev(): void {
     if (this.portion === 0) return
-    this.courseSub = this.courseListService.getList(--this.portion)
-      .subscribe(list => {
-        this.courseList = list
-      })
+    this.updateList(--this.portion)
   }
 
   handleNext(): void {
-    this.courseSub = this.courseListService.getList(++this.portion)
-      .subscribe(list => {
-        this.courseList = list
-      })
+    this.updateList(++this.portion)
   }
 }

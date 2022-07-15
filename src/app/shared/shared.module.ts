@@ -12,6 +12,7 @@ import {BorderDirective} from "./directives/border.directive";
 import {RouterModule} from "@angular/router";
 import {HTTP_INTERCEPTORS} from "@angular/common/http";
 import {AuthenticationInterceptor} from "../authentication/authentication/authentication.interceptor";
+import {NgxSpinnerModule} from "ngx-spinner";
 
 
 
@@ -30,7 +31,9 @@ import {AuthenticationInterceptor} from "../authentication/authentication/authen
   ],
   imports: [
     CommonModule,
-    RouterModule
+    RouterModule,
+    NgxSpinnerModule,
+
   ],
   exports: [
     DurationPipe,
@@ -41,7 +44,8 @@ import {AuthenticationInterceptor} from "../authentication/authentication/authen
     FooterComponent,
     BorderDirective,
     IfAuthenticatedDirective,
-    FilterPipe
+    FilterPipe,
+    NgxSpinnerModule
   ],
   providers: [
     {

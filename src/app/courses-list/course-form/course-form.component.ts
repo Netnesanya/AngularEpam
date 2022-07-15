@@ -3,6 +3,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {Author, Course} from "../../shared/models/course.model";
 import {CourseListService} from "../../shared/services/course-list.service";
 import {Subscription} from "rxjs";
+import {NgxSpinnerService} from "ngx-spinner";
 
 
 @Component({
@@ -12,9 +13,9 @@ import {Subscription} from "rxjs";
 })
 export class CourseFormComponent implements OnInit, OnDestroy {
 
+  private routerSub$: Subscription;
   private courseFormSub$: Subscription;
   private currentCourse: Course;
-
 
   public courseLength: number;
   public courseDate: string;
@@ -24,36 +25,46 @@ export class CourseFormComponent implements OnInit, OnDestroy {
   public courseTopRated: boolean;
   public currentId: number;
 
-  constructor(public router: Router,
-              public courseListService: CourseListService,
-              public route: ActivatedRoute) {
+  constructor(private router: Router,
+              private courseListService: CourseListService,
+              private route: ActivatedRoute,
+              private spinner: NgxSpinnerService) {
   }
 
   ngOnInit(): void {
-    this.currentId = Number(this.route.snapshot.paramMap.get('id'))
+    this.routerSub$ = this.route.paramMap.subscribe(params => {
+      this.currentId = Number(params.get('id'))
+      if (params.get('id')) {
+        this.loadCourse()
+      }
+    })
 
-    if (isNaN(this.currentId) || !this.courseListService.getCourseById(this.currentId) && this.currentId) {
-      this.router.navigate(['404'])
-
-    } else if (this.currentId) {
-
-      this.courseFormSub$ = this.courseListService.getCourseById(this.currentId)
-        .subscribe(course => {
-
-          this.currentCourse = course;
-          this.courseDate = this.currentCourse.date;
-          this.courseName = this.currentCourse.name;
-          this.courseLength = this.currentCourse.length;
-          this.courseDescription = this.currentCourse.description;
-          this.courseTopRated = this.currentCourse.isTopRated;
-          this.courseAuthors = this.currentCourse.authors
-
-        })
-    }
   }
 
   ngOnDestroy() {
     this.courseFormSub$.unsubscribe()
+    this.routerSub$.unsubscribe()
+  }
+
+  loadCourse(): void {
+    this.spinner.show()
+    this.courseFormSub$ = this.courseListService.getCourseById(this.currentId)
+      .subscribe(course => {
+        this.currentCourse = course;
+
+        this.courseDate = this.currentCourse.date;
+        this.courseName = this.currentCourse.name;
+        this.courseLength = this.currentCourse.length;
+        this.courseDescription = this.currentCourse.description;
+        this.courseTopRated = this.currentCourse.isTopRated;
+        this.courseAuthors = this.currentCourse.authors
+
+      },
+        error => {
+        console.log(error);
+        this.router.navigate(['404'])
+        },
+        () => this.spinner.hide())
   }
 
   onDurationChange(value: number): void {
@@ -79,28 +90,13 @@ export class CourseFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  editCourse(): Course {
-    return this.currentCourse = {
-      id: this.currentId,
-      name: this.courseName,
-      description: this.courseDescription,
-      length: this.courseLength,
-      date: this.courseDate,
-      authors: {
-        id: 123,
-        name: 'author'
-      },
-      isTopRated: (5 < (Math.random() * 10))
-    }
-  }
-
   onCancelClick(): void {
     this.router.navigate(['/courses'])
   }
 
   onSaveClick(): void {
     if (this.currentId) {
-      this.courseFormSub$ = this.courseListService.updateCourse(this.currentId, this.editCourse())
+      this.courseFormSub$ = this.courseListService.updateCourse(this.currentId, this.createCourse())
         .subscribe(response => console.log(response))
       this.courseListService.getList()
       this.router.navigate(['/courses'])

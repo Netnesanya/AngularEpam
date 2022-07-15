@@ -1,9 +1,11 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 import {BehaviorSubject, Observable} from "rxjs";
 import {Router} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
 import {Authentication, AuthResponse, User} from "../models/authentication.model";
+import {NgxSpinnerService} from "ngx-spinner";
+
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +13,8 @@ import {Authentication, AuthResponse, User} from "../models/authentication.model
 export class AuthService {
 
   constructor(public router: Router,
-              private httpClient: HttpClient) {
+              private httpClient: HttpClient,
+              private spinner: NgxSpinnerService) {
   }
 
   private loginPage: BehaviorSubject<boolean> = new BehaviorSubject(false)
@@ -32,18 +35,23 @@ export class AuthService {
 
   logout(): void {
     if (this.isAuthenticated.getValue()) {
-      localStorage.setItem('token', '')
-      this.isAuthenticated.next(false)
+        localStorage.setItem('token', '')
+        this.isAuthenticated.next(false)
     }
   }
 
   handleLogin(userData: Authentication): void {
-    this.httpClient.post<AuthResponse>(`${environment.URL}auth/login`, userData)
-      .subscribe(response => this.setToken(response))
+    this.spinner.show()
+     this.httpClient.post<AuthResponse>(`${environment.URL}auth/login`, userData)
+      .subscribe(response => {
+        this.setToken(response);
+        this.spinner.hide()
+      })
   }
 
   setToken(response: AuthResponse) {
     if (response) {
+      localStorage.setItem('token', response.token)
       this.isAuthenticated.next(true)
       this.router.navigate(['courses'])
     }
