@@ -10,8 +10,6 @@ import {HeaderComponent} from "./header/header.component";
 import {FooterComponent} from "./footer/footer.component";
 import {BorderDirective} from "./directives/border.directive";
 import {RouterModule} from "@angular/router";
-import {HTTP_INTERCEPTORS} from "@angular/common/http";
-import {AuthenticationInterceptor} from "../authentication/authentication/authentication.interceptor";
 import {NgxSpinnerModule} from "ngx-spinner";
 
 
@@ -48,11 +46,7 @@ import {NgxSpinnerModule} from "ngx-spinner";
     NgxSpinnerModule
   ],
   providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthenticationInterceptor,
-      multi: true
-    }
+
   ]
 })
 export class SharedModule { }

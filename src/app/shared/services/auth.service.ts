@@ -12,14 +12,17 @@ import {NgxSpinnerService} from "ngx-spinner";
 })
 export class AuthService {
 
-  constructor(public router: Router,
-              private httpClient: HttpClient,
-              private spinner: NgxSpinnerService) {
-  }
+  private userLoginURL = 'auth/login'
+  private userInfoURL = 'auth/userinfo'
 
   private loginPage: BehaviorSubject<boolean> = new BehaviorSubject(false)
   private userToken: BehaviorSubject<string> = new BehaviorSubject(localStorage.getItem('token'))
   private isAuthenticated: BehaviorSubject<boolean> = new BehaviorSubject(this.isAuth())
+
+  constructor(public router: Router,
+              private httpClient: HttpClient,
+              private spinner: NgxSpinnerService) {
+  }
 
   login(login: string, password: string): void {
     if (!login || !password) return
@@ -42,11 +45,15 @@ export class AuthService {
 
   handleLogin(userData: Authentication): void {
     this.spinner.show()
-     this.httpClient.post<AuthResponse>(`${environment.URL}auth/login`, userData)
+     this.httpClient.post<AuthResponse>(`${environment.URL}${this.userLoginURL}`, userData)
       .subscribe(response => {
         this.setToken(response);
         this.spinner.hide()
-      })
+      },
+        error => {
+          console.log(error)
+          this.spinner.hide()
+        } )
   }
 
   setToken(response: AuthResponse) {
@@ -75,7 +82,7 @@ export class AuthService {
 
   getUser(): Observable<User> {
     const token = this.getToken()
-    return this.httpClient.post<User>(`${environment.URL}auth/userinfo`, {token})
+    return this.httpClient.post<User>(`${environment.URL}${(this.userInfoURL)}`, {token})
   }
 
   isAuth() {
