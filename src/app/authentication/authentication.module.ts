@@ -1,9 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {AuthenticationComponent} from "./authentication/authentication.component";
-import {BrowserModule} from "@angular/platform-browser";
 import {FormsModule} from "@angular/forms";
 import {RouterModule, Routes} from "@angular/router";
+import {SharedModule} from "../shared/shared.module";
+import {NgxSpinnerService} from "ngx-spinner";
+
 
 
 const routes: Routes = [
@@ -15,13 +17,13 @@ const routes: Routes = [
     AuthenticationComponent
   ],
   imports: [
-    BrowserModule,
     FormsModule,
     RouterModule.forRoot(routes),
-    CommonModule
+    CommonModule,
+    SharedModule
   ],
   exports: [AuthenticationComponent],
-  providers: []
+  providers: [NgxSpinnerService]
 })
 export class AuthenticationModule { }
 

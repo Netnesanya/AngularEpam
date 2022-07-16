@@ -1,8 +1,7 @@
 <app-breadcrumbs></app-breadcrumbs>
 <div class="container">
   <div>
-    <input [(ngModel)]="searchQuery" class="search-input" placeholder="Type to search" type="text">
-    <button (click)="handleSearch()" class="search-btn" type="submit"><label>Search</label></button>
+    <input (keyup)="handleSearch($event)"  class="search-input" placeholder="Type to search" type="text">
   </div>
   <div class="btn-container">
     <button (click)="onAddCourseClick()" class="add-course-btn">
@@ -10,6 +9,9 @@
       <label>Add Course</label>
     </button>
   </div>
+
+  <ngx-spinner type="ball-scale-multiple"></ngx-spinner>
+
   <div *ngIf="courseList?.length; else emptyList">
     <app-course (onDeleteClick)="handleDelete($event)" *ngFor="let course of courseList; trackBy: trackById"
                 [course]="course"></app-course>
@@ -17,7 +19,6 @@
     <button (click)="handleNext()" class="pagination-button" type="button">Next</button>
     <div class="course-load">
       <a (click)="handleLoadMore($event)" href="">Load more</a>
-
     </div>
   </div>
 </div>

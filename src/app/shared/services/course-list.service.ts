@@ -10,6 +10,7 @@ import {Observable} from "rxjs";
 })
 export class CourseListService {
 
+  private coursesURL = 'courses'
 
   constructor(private httpClient: HttpClient) {
   }
@@ -24,25 +25,25 @@ export class CourseListService {
     params = params.append('start', portion * coursesCount)
     if (query) params = params.append('textFragment', query);
 
-    return this.httpClient.get<Course[]>(environment.URL + 'courses', {params})
+    return this.httpClient.get<Course[]>(environment.URL + this.coursesURL, {params})
   }
 
   createCourse(course: Course): Observable<Course> {
-    return this.httpClient.post<Course>(environment.URL + 'courses', course)
+    return this.httpClient.post<Course>(environment.URL + this.coursesURL, course)
   }
 
   getCourseById(id: number): Observable<Course> {
-    return this.httpClient.get<Course>(environment.URL + `courses/${id}`)
+    return this.httpClient.get<Course>(environment.URL + `${this.coursesURL}/${id}`)
   }
 
 
   updateCourse(id: number, course: Course): Observable<Course> {
-   return this.httpClient.patch<Course>(environment.URL + `courses/${id}`, course)
+   return this.httpClient.patch<Course>(environment.URL + `${this.coursesURL}/${id}`, course)
   }
 
 
   removeCourse(id: number): Observable<Course> {
-     return this.httpClient.delete<Course>(environment.URL + `courses/${id}`)
+     return this.httpClient.delete<Course>(environment.URL + `${this.coursesURL}/${id}`)
   }
 
 }

@@ -1,22 +1,28 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 import {BehaviorSubject, Observable} from "rxjs";
 import {Router} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
 import {Authentication, AuthResponse, User} from "../models/authentication.model";
+import {NgxSpinnerService} from "ngx-spinner";
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(public router: Router,
-              private httpClient: HttpClient) {
-  }
+  private userLoginURL = 'auth/login'
+  private userInfoURL = 'auth/userinfo'
 
   private loginPage: BehaviorSubject<boolean> = new BehaviorSubject(false)
   private userToken: BehaviorSubject<string> = new BehaviorSubject(localStorage.getItem('token'))
   private isAuthenticated: BehaviorSubject<boolean> = new BehaviorSubject(this.isAuth())
+
+  constructor(public router: Router,
+              private httpClient: HttpClient,
+              private spinner: NgxSpinnerService) {
+  }
 
   login(login: string, password: string): void {
     if (!login || !password) return
@@ -32,18 +38,27 @@ export class AuthService {
 
   logout(): void {
     if (this.isAuthenticated.getValue()) {
-      localStorage.setItem('token', '')
-      this.isAuthenticated.next(false)
+        localStorage.setItem('token', '')
+        this.isAuthenticated.next(false)
     }
   }
 
   handleLogin(userData: Authentication): void {
-    this.httpClient.post<AuthResponse>(`${environment.URL}auth/login`, userData)
-      .subscribe(response => this.setToken(response))
+    this.spinner.show()
+     this.httpClient.post<AuthResponse>(`${environment.URL}${this.userLoginURL}`, userData)
+      .subscribe(response => {
+        this.setToken(response);
+        this.spinner.hide()
+      },
+        error => {
+          console.log(error)
+          this.spinner.hide()
+        } )
   }
 
   setToken(response: AuthResponse) {
     if (response) {
+      localStorage.setItem('token', response.token)
       this.isAuthenticated.next(true)
       this.router.navigate(['courses'])
     }
@@ -67,7 +82,7 @@ export class AuthService {
 
   getUser(): Observable<User> {
     const token = this.getToken()
-    return this.httpClient.post<User>(`${environment.URL}auth/userinfo`, {token})
+    return this.httpClient.post<User>(`${environment.URL}${(this.userInfoURL)}`, {token})
   }
 
   isAuth() {

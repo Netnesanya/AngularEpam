@@ -1,6 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AuthService} from "../services/auth.service";
 import {Router} from "@angular/router";
+import { Subscription} from "rxjs";
 
 @Component({
   selector: 'app-header',
@@ -8,6 +9,8 @@ import {Router} from "@angular/router";
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit, OnDestroy {
+
+  private authSubscribe$: Subscription;
 
   loginPage: boolean = false;
   userEmail: string;
@@ -27,14 +30,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.authService.getPageStatus()
+    this.authSubscribe$ =  this.authService.getPageStatus()
       .subscribe(pageStatus => this.loginPage = pageStatus)
 
-    // this.authService.logEmail()
-    //   .subscribe(email => this.userEmail = email)
+
+    this.authSubscribe$ = this.authService.getUser()
+      .subscribe(email => this.userEmail = email.login)
   }
 
   ngOnDestroy(): void {
+    this.authSubscribe$.unsubscribe()
     localStorage.removeItem('email')
     localStorage.removeItem('password')
   }
